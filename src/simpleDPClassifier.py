@@ -48,9 +48,10 @@ class Model(nn.Module):
         )
 
         iteration = 0
+        accum_loss = 0
         for X_minibatch, y_minibatch in minibatch_loader(dataset):
             self.optimizer.zero_grad()
-            # running_loss = 0
+            running_loss = 0
             for X_microbatch, y_microbatch in microbatch_loader(TensorDataset(X_minibatch, y_minibatch)):
                 X_microbatch = X_microbatch.to(self.params['device'])
                 y_microbatch = y_microbatch.to(self.params['device'])
@@ -61,11 +62,17 @@ class Model(nn.Module):
 
                 loss.backward()
                 self.optimizer.microbatch_step()
-                # running_loss += loss.item()
+                running_loss += loss.item()
+                accum_loss += loss.item()
             self.optimizer.step()
 
             if iteration % 10 == 0:
-                print('[Iteration %d/%d] [Loss: %f]' % (iteration, self.params['iterations'], loss.item()))
+                print('[Iteration %d/%d] [Avg Loss (last 10 It.): %f] [This It. Loss: %f]' % 
+                            (iteration, self.params['iterations'],
+                            accum_loss/(self.params['minibatch_size']/self.params['microbatch_size']/10*self.params['minibatch_size']),
+                            running_loss/(self.params['minibatch_size']/self.params['microbatch_size'])))
+                accum_loss = 0
+
             iteration += 1
         
         # for i in range(epochs):
@@ -90,7 +97,7 @@ class Model(nn.Module):
             accuracies.append(accuracy)
         print(
             f"Accuracy: {round(sum(accuracies)/len(accuracies), 2)}%")
-
+    
     def eval_dataset(self, X_test, y_test):
         with torch.no_grad():
             logps = self.model(X_test.view(-1, params['pca_components']))
@@ -102,12 +109,12 @@ if __name__ == '__main__':
     params = {
         'delta': 1e-5,
         'device': 'cpu',
-        'iterations': 1000,
+        'iterations': 100,
         'l2_norm_clip': 4.,
         'l2_penalty': 0.001,
-        'lr': 0.001,
+        'lr': 0.075,
         'microbatch_size': 1,
-        'minibatch_size': 100,
+        'minibatch_size': 200,
         'noise_multiplier': 2,
         'pca_components': 30
     }
