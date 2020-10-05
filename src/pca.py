@@ -8,7 +8,7 @@ from torch.utils.data import TensorDataset
 from torchvision import datasets, transforms
 
 
-def mnist_private_pca(epsilon=4):
+def mnist_private_pca(epsilon=4, components=60):
     transformations = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize((0.5,), (0.5,))])
@@ -30,17 +30,17 @@ def mnist_private_pca(epsilon=4):
     y_test = test.targets
 
     DPPCA = diffprivlib.models.pca.PCA(
-        n_components=60, centered=True, epsilon=epsilon)
+        n_components=components, centered=True, epsilon=epsilon)
     X_train_pc = DPPCA.fit_transform(X_train)
-    X_train_pc = torch.Tensor(X_train_pc).view(-1, 60)
+    X_train_pc = torch.Tensor(X_train_pc).view(-1, components)
 
     X_test_pc = DPPCA.transform(X_test)
-    X_test_pc = torch.Tensor(X_test_pc).view(-1, 60)
+    X_test_pc = torch.Tensor(X_test_pc).view(-1, components)
     return X_train_pc, y_train, X_test_pc, y_test
 
 
-def mnist_private_pca_dataloaders(epsilon, batch_size=64, shuffle=True):
-    X_train, y_train, X_test, y_test = mnist_private_pca(epsilon=epsilon)
+def mnist_private_pca_dataloaders(epsilon, components=60, batch_size=64, shuffle=True):
+    X_train, y_train, X_test, y_test = mnist_private_pca(epsilon=epsilon, components=components)
     mnist_train_loader = torch.utils.data.DataLoader(TensorDataset(
         X_train, y_train), batch_size=batch_size, shuffle=shuffle)
     mnist_test_loader = torch.utils.data.DataLoader(TensorDataset(
