@@ -23,10 +23,10 @@ def mnist_private_pca(epsilon=4):
                           download=True,
                           transform=transformations)
 
-    X_train = train.data.float().view(-1, 28*28)/255
+    X_train = train.data.view(-1, 28*28)
     y_train = train.targets
 
-    X_test = test.data.float().view(-1, 28*28)/255
+    X_test = test.data.view(-1, 28*28)
     y_test = test.targets
 
     DPPCA = diffprivlib.models.pca.PCA(
