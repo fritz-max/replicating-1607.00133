@@ -1,5 +1,5 @@
 # replicating-1607.00133
-Replication of differentially private MNIST Classification from arxiv:1607.00133 in pytorch.
+Replication of differentially private MNIST Classification from [arxiv:1607.00133](https://arxiv.org/abs/1607.00133) in pytorch.
 
 ## Todolist wednesday
 - [X] Which plots?
