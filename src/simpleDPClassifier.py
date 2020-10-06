@@ -115,14 +115,14 @@ if __name__ == '__main__':
             'iterations': 10000,
             'l2_norm_clip': 4.,
             'l2_penalty': 0.001,
-            'lr': 0.075,
+            'lr': 0.052,
             'microbatch_size': 1,
             'minibatch_size': 600,
             'noise_multiplier': noise,
             'pca_components': 60
         }
 
-        X_train, y_train, X_test, y_test = mnist_private_pca(epsilon=1, components=params['pca_components'])
+        X_train, y_train, X_test, y_test = mnist_private_pca(epsilon=2, components=params['pca_components'])
         
         test_loader=torch.utils.data.DataLoader(TensorDataset(X_test, y_test), batch_size=64, shuffle=True)
 
@@ -131,6 +131,11 @@ if __name__ == '__main__':
         model.eval_dataset(X_test, y_test)
 
         with open(f"data_noise{noise}.txt", 'w') as filehandle:
+            filehandle.write("Parameters:\n")
+            for key, value in params.items():
+                filehandle.write(f"{key}: {value}\n")
+            
+            filehandle.write("\n")
             filehandle.write(f"Noise Level: {noise}\nDP: ({model.dp[0]:.2f}, {model.dp[1]})\n")
             filehandle.write("\n")
             filehandle.write("Test Accuracies (every 100 Iterations, i.e. 1 Epoch):\n")
