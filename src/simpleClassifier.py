@@ -15,9 +15,6 @@ class Model(nn.Module):
         self.optimizer = optim.SGD(self.model.parameters(), lr=0.001)
         self.criterion = nn.NLLLoss()
 
-    def forward(self, x):
-        return self.model(x)
-
     def train(self, dataloader, epochs=2):
         for i in range(epochs):
             running_loss = 0
