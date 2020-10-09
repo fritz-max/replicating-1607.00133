@@ -7,6 +7,20 @@ from pca import mnist_private_pca_dataloaders, mnist_private_pca
 from pyvacy import optim, analysis, sampling
 
 
+def _DPSGD(model_params):
+    """curried DPSGD version, missing model parameters
+    """
+    return optim.DPSGD(
+        l2_norm_clip=0.001,
+        noise_multiplier=2,
+        minibatch_size=100,
+        microbatch_size=1,
+        params=model_params,
+        lr=0.05,
+        weight_decay=0.001
+    )
+
+
 class Model(nn.Module):
     def __init__(self, params):
         super(Model, self).__init__()
@@ -17,34 +31,14 @@ class Model(nn.Module):
             nn.LogSoftmax(dim=1)
         ).to('cpu')
         self.params = params
-        self.optimizer = optim.DPSGD(
-            l2_norm_clip=params['l2_norm_clip'],
-            noise_multiplier=params['noise_multiplier'],
-            minibatch_size=params['minibatch_size'],
-            microbatch_size=params['microbatch_size'],
-            params=self.model.parameters(),
-            lr=params['lr'],
-            weight_decay=params['l2_penalty'],
-        )
         self.criterion = nn.NLLLoss()
         self.test_results = []
-
-        # self.dp = (analysis.epsilon(
-        #                 len(X_train),
-        #                 params['minibatch_size'],
-        #                 params['noise_multiplier'],
-        #                 params['iterations'],
-        #                 params['delta']
-        #             ),
-        #             params['delta'])
-
-        # print(
-        #     f"Specified parameters achieve ({self.dp[0]:.2f}, {self.dp[1]})-DP")
 
     def forward(self, x):
         return self.model(x)
 
-    def train(self, dataset, test_dataset):
+    def train(self, train_dataset, test_dataset):
+        self.optimizer = _DPSGD(self.model.parameters())
         minibatch_loader, microbatch_loader = sampling.get_data_loaders(
             self.params['minibatch_size'],
             self.params['microbatch_size'],
@@ -57,7 +51,7 @@ class Model(nn.Module):
 
         iteration = 0
         accum_loss = 0
-        for X_minibatch, y_minibatch in minibatch_loader(dataset):
+        for X_minibatch, y_minibatch in minibatch_loader(train_dataset):
             self.optimizer.zero_grad()
             running_loss = 0
             iteration += 1
@@ -66,8 +60,8 @@ class Model(nn.Module):
                 y_microbatch = y_microbatch.to(self.params['device'])
 
                 self.optimizer.zero_microbatch_grad()
-                prediction = self.model(X_microbatch)
-                loss = self.criterion(prediction, y_microbatch)
+                prediction = self.model(X_microbatch.float())
+                loss = self.criterion(prediction, y_microbatch.long())
 
                 loss.backward()
                 self.optimizer.microbatch_step()
@@ -77,9 +71,9 @@ class Model(nn.Module):
 
             if iteration % 10 == 0:
                 train_acc.append(self.eval_dataset(
-                    dataset[:][0], dataset[:][1]))
+                    train_dataset[:][0], train_dataset[:][1]))
                 test_acc.append(self.eval_dataset(
-                    test_dataset[:][0], test_dataset[:][1]))
+                    test_dataset[:][0], test_loader[:][1]))
                 print('[Iteration %d/%d] [Avg Loss (last 10 It.): %f] [This It. Loss: %f]' %
                       (iteration, self.params['iterations'],
                        accum_loss /
@@ -111,6 +105,9 @@ class Model(nn.Module):
             f"Test Accuracy: {test_acc}%")
 
         return test_acc
+
+
+
 
 
 if __name__ == '__main__':
@@ -155,3 +152,15 @@ if __name__ == '__main__':
 
             for i, elem in enumerate(model.test_results):
                 filehandle.write(f"{i}: {elem}\n")
+
+        # self.dp = (analysis.epsilon(
+        #                 len(X_train),
+        #                 params['minibatch_size'],
+        #                 params['noise_multiplier'],
+        #                 params['iterations'],
+        #                 params['delta']
+        #             ),
+        #             params['delta'])
+
+        # print(
+        #     f"Specified parameters achieve ({self.dp[0]:.2f}, {self.dp[1]})-DP")
