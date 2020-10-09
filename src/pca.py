@@ -8,19 +8,19 @@ from torch.utils.data import TensorDataset
 from torchvision import datasets, transforms
 
 
-def mnist_private_pca(epsilon=4, components=60):
+def mnist_private_pca(epsilon=4, components=60, download=True):
     transformations = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize((0.5,), (0.5,))])
 
     train = datasets.MNIST('data/mnist',
                            train=True,
-                           download=True,
+                           download=download,
                            transform=transformations)
 
     test = datasets.MNIST('data/mnist',
                           train=False,
-                          download=True,
+                          download=download,
                           transform=transformations)
 
     X_train = train.data.view(-1, 28*28)
@@ -39,8 +39,9 @@ def mnist_private_pca(epsilon=4, components=60):
     return X_train_pc, y_train, X_test_pc, y_test
 
 
-def mnist_private_pca_dataloaders(epsilon, components=60, batch_size=64, shuffle=True):
-    X_train, y_train, X_test, y_test = mnist_private_pca(epsilon=epsilon, components=components)
+def mnist_private_pca_dataloaders(epsilon=4, components=60, batch_size=64, shuffle=True, download=True):
+    X_train, y_train, X_test, y_test = mnist_private_pca(
+        epsilon=epsilon, components=components, download=download)
     mnist_train_loader = torch.utils.data.DataLoader(TensorDataset(
         X_train, y_train), batch_size=batch_size, shuffle=shuffle)
     mnist_test_loader = torch.utils.data.DataLoader(TensorDataset(
