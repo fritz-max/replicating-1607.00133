@@ -13,9 +13,9 @@ Replication of differentially private MNIST Classification from [arxiv:1607.0013
   - [ ] code comments 
   - [ ] requirements.txt
   - [ ] code 
-    - [ ] private pca code
+    - [x] private pca code
     - [ ] plots
-    - [ ] baseline model
+    - [x] baseline model
   - [ ] data folder
     - [ ] results in a file 
     - [ ] pca mnist (datasets) in a file
