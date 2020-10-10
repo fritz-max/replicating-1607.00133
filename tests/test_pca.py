@@ -2,10 +2,10 @@
 from sys import path
 path.append("../src")
 
-import pca
+import ppca
 
 def test_mnist_private_pca_defaultParamCall():
-    pca.mnist_private_pca()
+    ppca.mnist_private_pca()
 
 def test_mnist_private_pca_defaultParamCall():
-    pca.mnist_private_pca_dataloaders()
+    ppca.mnist_private_pca_dataloaders()

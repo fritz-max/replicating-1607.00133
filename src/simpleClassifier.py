@@ -41,7 +41,7 @@ class Model(nn.Module):
 
 
 if __name__ == '__main__':
-    from pca import mnist_private_pca_dataloaders
+    from ppca import mnist_private_pca_dataloaders
     mnist_train_loader, mnist_test_loader = mnist_private_pca_dataloaders(
         epsilon=1)
     model = Model()

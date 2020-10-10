@@ -5,7 +5,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
-from pca import mnist_private_pca
+from ppca import mnist_private_pca
 
 from pyvacy import optim, sampling
 

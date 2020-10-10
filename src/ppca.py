@@ -1,4 +1,10 @@
-"""
+"""This file suppies two methods for extracting a private Principle Component
+Analysis of the mnist dataset.
+
+Notes:
+For this the IBM diffprivlib is used, which is
+used to greatly reduced the dimensionality of the mnist dataset and decrease
+the time experiments take to run.
 """
 
 import diffprivlib
@@ -9,6 +15,8 @@ from torchvision import datasets, transforms
 
 
 def mnist_private_pca(epsilon=4, components=60, download=True):
+    '''
+    '''
     transformations = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize((0.5,), (0.5,))])
