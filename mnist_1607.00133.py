@@ -5,7 +5,8 @@ from pca import mnist_private_pca_dataloaders, mnist_private_pca
 
 from pyvacy import optim, analysis, sampling
 
-from simpleDPClassifier import Model
+from DPClassifier import Model
+
 
 noise_levels = [2, 4, 8]
 
@@ -30,7 +31,7 @@ for noise in noise_levels:
         TensorDataset(X_test, y_test), batch_size=64, shuffle=True)
 
     model = Model(params=params)
-    model.train(dataset=TensorDataset(
+    train(dataset=TensorDataset(
         X_train, y_train), test_dataset=TensorDataset(X_test, y_test))
     model.eval_dataset(X_test, y_test)
     model.eval_dataset(X_train, y_train)
