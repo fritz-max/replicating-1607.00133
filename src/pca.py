@@ -30,7 +30,7 @@ def mnist_private_pca(epsilon=4, components=60, download=True):
     y_test = test.targets
 
     DPPCA = diffprivlib.models.pca.PCA(
-        n_components=components, centered=True, epsilon=epsilon)
+        n_components=components, centered=True, epsilon=epsilon, data_norm=True)
     X_train_pc = DPPCA.fit_transform(X_train)
     X_train_pc = torch.Tensor(X_train_pc).view(-1, components)
 
