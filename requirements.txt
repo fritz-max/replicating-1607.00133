@@ -1,0 +1,5 @@
+torch==1.6.0
+-e git+https://github.com/ChrisWaites/pyvacy.git@2e0a9f4f71152990d60b154911070f5f60a493af#egg=pyvacy
+diffprivlib==0.3.0
+torchvision==0.7.0
+numpy==1.19.2
