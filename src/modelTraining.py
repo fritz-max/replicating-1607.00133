@@ -27,3 +27,24 @@ def train(model, minibatch_loader, micro_loader_func, optimizer, criterion, iter
 
         optimizer.step()
         print(f"Loss: {running_loss/len(minibatch_loader)}")
+
+
+def eval_dataset(model, X_test, y_test):
+        with torch.no_grad():
+            logps = model(X_test.view(-1, 60))
+        return round(((torch.exp(logps).argmax(dim=1) == y_test).sum().float()/len(X_test)*100).item(), 2)
+
+def eval_dataloader(dataloader):
+    accuracies = []
+    for X_test, y_test in dataloader:
+        with torch.no_grad():
+            logps = model(X_test)
+        accuracy = ((torch.exp(logps).argmax(dim=1) ==
+                        y_test).sum().float()/len(X_test)*100).item()
+        accuracies.append(accuracy)
+
+    test_acc = round(sum(accuracies)/len(accuracies), 2)
+    print(
+        f"Test Accuracy: {test_acc}%")
+
+    return test_acc

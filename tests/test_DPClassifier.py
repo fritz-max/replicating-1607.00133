@@ -56,3 +56,15 @@ def test_Model_training():
         criterion=torch.nn.NLLLoss(),
         iterations=1,
         device='cpu')
+
+def test_Model_prediction():
+    model = Model(input_dim=INPUT_DIM)
+    train(
+        model=model,
+        minibatch_loader=minibatch_loader,
+        micro_loader_func=microbatch_loader_func,
+        optimizer=_DPSGD(model.parameters()),
+        criterion=torch.nn.NLLLoss(),
+        iterations=1,
+        device='cpu')
+    model.predict(X_test)
