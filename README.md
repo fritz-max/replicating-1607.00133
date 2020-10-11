@@ -7,7 +7,7 @@ The goal of the project is to train a simple classifier on the MNIST dataset, bu
 
 ### **Applying differentially private PCA to MNIST**
 
-First, dimension reduction is performed using a differentially private version of PCA (Principal Components Analysis), adapted from [2]. This is mainly done to reduce training time, however it also increases model accuracy by around 2%. Furthermore, the accuracy is fairly stable accross different levels of noise applied to the PCA, which can be seen in plot **XY** and is in line with the findings of [1].      
+First, dimension reduction is performed using a differentially private version of PCA (Principal Components Analysis), adapted from [2]. This is mainly done to reduce training time, however it also increases model accuracy by around 2%. Furthermore, the accuracy is fairly stable accross different levels of noise applied to the PCA, which can be seen in plot **XY** (TODO: Add Plot in here) and is in line with the findings of [1].      
 This step is carried out in `src/ppca.py`**(LINK)**. 
 
 ### **Training the classifier**
@@ -15,17 +15,17 @@ This step is carried out in `src/ppca.py`**(LINK)**.
 The reduced MNIST dataset is used to train the model provided in `src/DPClassifier.py`. The training is carried out in `mnist_1607.00133.py`.  
 The used differentially private optimizer (DPSGD) as well as the moments accountant are adopted from [3]. 
 
-# Results
-Can be seen in results folder.
+## Results
+The results are included as plots in the `results/` folder. The plots show, how the test accuracy decreases for increasing noise levels.
 
   - [ ] TODO -> include plots
 
 include plots here -> show them and discuss a little 
 
-# Run the experiment yourself
+## Run the experiment yourself
 You can replicate the results yourself by using the provided code. 
 
-## Prerequisites
+### Prerequisites
 Clone the repo and install the requirements using
 
 ```sh
@@ -35,7 +35,7 @@ Refer to the `requirements.txt` file for the list of dependencies.
 
 - mention that pyvacy is being installed by cloning the repo (link) and running setup.py
 
-## Execution
+### Execution
 Once set up, the experiment can be run using 
 ```sh
 $ python mnist_1607.00133.py
@@ -43,7 +43,7 @@ $ python mnist_1607.00133.py
 **Disclaimer:** The combination of *differentially private SGD* and *moments accountant optimizer* used in this project require to compute the gradient for every individual sample. Therefore the training does not make use of GPU parallelization, making it **very slow** compared to todays standards of training neural networks.  
 
 
-# References
+## References
 
 [1] Martín Abadi, Andy Chu, Ian Goodfellow, H. Brendan McMahan, Ilya Mironov, Kunal Talwar, Li Zhang. *Deep Learning with Differential Privacy*. [arXiv:1607.00133v2](https://arxiv.org/abs/1607.00133v2)
 
