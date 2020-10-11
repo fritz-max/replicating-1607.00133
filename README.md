@@ -1,20 +1,19 @@
 # replicating-1607.00133
-Differentially private classification of the MNIST dataset from [arXiv:1607.00133v2](https://arxiv.org/abs/1607.00133v2) [1] in PyTorch.
+Differentially private classification of MNIST in PyTorch. This project replicates the results from [arXiv:1607.00133v2](https://arxiv.org/abs/1607.00133v2) [1].
 
-# Project Description
+## Project Description
 
-This project aims to replicate the results of the mentioned paper on the MNIST dataset as close as possible, primarily to experiment with differential privacy in PyTorch. 
-This includes following steps
+The goal of the project is to train a simple classifier on the MNIST dataset, but in a differentially private way. A full explanation of the experiment and the used techniques can be found in [1]. As a quick overview, the experiment includes following steps: 
 
-**Applying differentially private PCA to MNIST** 
+### **Applying differentially private PCA to MNIST**
 
-The functions in `src/pca.py` file download the MNIST dataset from torchvision and apply differentially private Principal Components Analysis [2] to reduce input dimensionality from 784 to 60.  
-The processed Training and Testing Dataset are also provided in the XY folder (Really?) 
+First, dimension reduction is performed using a differentially private version of PCA (Principal Components Analysis), adapted from [2]. This is mainly done to reduce training time, however it also increases model accuracy by around 2%. Furthermore, the accuracy is fairly stable accross different levels of noise applied to the PCA, which can be seen in plot **XY** and is in line with the findings of [1].      
+This step is carried out in `src/ppca.py`**(LINK)**. 
 
-**Training a simple Neural Network on the data**
+### **Training the classifier**
 
-The data is used to train the model provided in `src/DPClassifier.py`, which is done in `mnist_1607.00133.py`. The differentially private optimizer and moments accountant in use are adopted from [3]. 
-
+The reduced MNIST dataset is used to train the model provided in `src/DPClassifier.py`. The training is carried out in `mnist_1607.00133.py`.  
+The used differentially private optimizer (DPSGD) as well as the moments accountant are adopted from [3]. 
 
 # Results
 Can be seen in results folder.
