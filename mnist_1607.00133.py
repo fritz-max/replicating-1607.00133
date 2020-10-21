@@ -11,6 +11,7 @@ from pyvacy import optim, sampling
 
 from DPClassifier import Model
 
+torch.set_num_threads(1)
 
 PCA_DIM = 60
 MINIBATCH_SIZE = 600
