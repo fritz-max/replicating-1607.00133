@@ -7,8 +7,8 @@ The goal of the project is to train a simple classifier on the MNIST dataset, bu
 
 #### **1. Applying differentially private PCA to MNIST**
 
-First, dimension reduction is performed using a differentially private version of PCA (Principal Components Analysis), adapted from [2]. This is mainly done to reduce training time, however it also increases model accuracy by around 2%. Furthermore, the accuracy is fairly stable accross different levels of noise applied to the PCA, which can be seen in plot **XY** (TODO: Add Plot in here) and is in line with the findings of [1].      
-This step is carried out in `src/ppca.py`**(LINK)**. 
+First, dimension reduction is performed using a differentially private version of PCA (Principal Components Analysis), adapted from [2]. This is mainly done to reduce training time, however it also increases model accuracy by around 2%. Furthermore, the accuracy is fairly stable accross different levels of noise applied to the PCA [1].      
+This step is carried out in `src/ppca.py`. 
 
 #### **2. Training the classifier**
 
@@ -16,11 +16,10 @@ The dimension-reduced MNIST dataset is used to train the model provided in `src/
 The used differentially private optimizer (DPSGD) as well as the moments accountant are adopted from [3]. 
 
 ### Results
-The results are included as plots in the `results/` folder. The plots show, how the test accuracy decreases for increasing noise levels.
+The results are included as plot in the `results/` folder and are shown here:
+<img src="https://github.com/fritz-max/replicating-1607.00133/blob/main/results/accuracy_plot.png">
 
-  - [ ] TODO -> include plots
-
-include plots here -> show them and discuss a little 
+From Left to right the noise level increases, showing how this affects the accuracy of the model.
 
 ## Run the experiment yourself
 You can replicate the results yourself by using the provided code. Clone the repo and install the requirements using
@@ -43,8 +42,6 @@ $ python mnist_1607.00133.py
 [2] IBM. [*IBM Differential Privacy Library*](https://github.com/zhehedream/COEN281).
 
 [3] Chris Waites. [*PyVacy: Privacy Algorithms for PyTorch*](https://github.com/ChrisWaites/pyvacy).
-
-
 
 ## Licenses 
 ?
