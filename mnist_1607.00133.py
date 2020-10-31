@@ -1,15 +1,26 @@
+"""This script aims to replicate some of the MNIST experiments conducted in
+the article Deep Learning with Differential
+Privacy(https://arxiv.org/pdf/1607.00133.pdf). Using the pytorch based
+library, pyvacy.
+
+The experiments took quite a while to run given that a gradient has to be
+computed for each microsample (size=1). Expect it to take approx 4 hours.
+
+Also this does not replicate the experiments fully given the resource
+required to do so. (especially the Small noise experiments with around 800
+epochs takes a while to run)
+"""
 from sys import path
 path.append("./src")
 
 import numpy as np
 import torch
-import torch.nn as nn
-from torch.utils.data import DataLoader, TensorDataset
-from ppca import mnist_private_pca
-
+from torch.utils.data import TensorDataset
 from pyvacy import optim, sampling
 
+from ppca import mnist_private_pca
 from DPClassifier import Model
+from differentiallyPrivateSGD import train, create_callback
 
 torch.set_num_threads(1)
 
@@ -20,63 +31,6 @@ ITERATIONS = 10000
 L2_NORM_CLIP=4
 LR=0.052
 WEIGHT_DECAY=0.001
-
-def train(model, minibatch_loader, micro_loader_func, optimizer, criterion, callback, callback_per_iteration, device='cpu'):
-    """TODO::
-    """
-    # sample a Lot
-
-    iteration = 0
-    for X_minibatch, y_minibatch in minibatch_loader:
-        running_loss = 0 
-        # the DPSGD optimizer uses two gradients
-        # setting the first to zero
-        optimizer.zero_grad()
-
-        for X_microbatch, y_microbatch in micro_loader_func(TensorDataset(X_minibatch, y_minibatch)):
-
-            # moving data onto device
-            X_microbatch = X_microbatch.to(device)
-            y_microbatch = y_microbatch.to(device)
-
-            # zeroing second gradient
-            optimizer.zero_microbatch_grad()
-
-            prediction = model.forward(X_microbatch)
-            loss = criterion(prediction, y_microbatch)
-
-            loss.backward()
-            optimizer.microbatch_step()
-            running_loss += loss.item()
-
-        optimizer.step()
-        # print(f"Loss: {running_loss/len(minibatch_loader)}")
-
-        if iteration % callback_per_iteration == 0:
-            print("Iterations: ", iteration)
-            callback()     
-        
-        iteration += 1
-
-
-def get_accuracy(predictions, targets):
-    return round((sum((predictions == targets)).float()/len(predictions)*100).item(), 2)
-
-def create_callback(model, train_dataset, test_dataset, train_acc_list, test_acc_list):
-    
-    def eval_callback():
-        # print(train_dataset[:][0].shape)
-        train_predictions = model.predict_class(train_dataset[:][0])
-        train_accuracy = get_accuracy(train_predictions, train_dataset[:][1])
-        train_acc_list.append(train_accuracy)
-
-        test_predictions = model.predict_class(test_dataset[:][0])
-        test_accuracy = get_accuracy(test_predictions, test_dataset[:][1])
-        test_acc_list.append(test_accuracy)
-
-        print(f"Training Accuracy: {train_accuracy}, Test Accuracy: {test_accuracy}")
-
-    return eval_callback
 
 for NOISE_MULTIPLIER in [2,4,8]:
     X_train, y_train, X_test, y_test = mnist_private_pca(
@@ -117,4 +71,3 @@ for NOISE_MULTIPLIER in [2,4,8]:
 
     np.save(f"./results/train_accuracies_noise{NOISE_MULTIPLIER}", train_accuracies)
     np.save(f"./results/test_accuracies_noise{NOISE_MULTIPLIER}", test_accuracies)
-

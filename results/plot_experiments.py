@@ -9,8 +9,8 @@ exp2 = (np.load("train_accuracies_noise2.npy")/100,
 exp4 = (np.load("train_accuracies_noise4.npy")[:500]/100,
         np.load("test_accuracies_noise4.npy")[:500]/100)
 
-exp8 = (np.load("train_accuracies_noise8.npy")[:670]/100,
-        np.load("test_accuracies_noise8.npy")[:670]/100)
+exp8 = (np.load("train_accuracies_noise8.npy")/100,
+        np.load("test_accuracies_noise8.npy")/100)
 
 experiments = [exp2, exp4, exp8]
 
