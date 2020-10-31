@@ -17,7 +17,7 @@ The used differentially private optimizer (DPSGD) as well as the moments account
 
 ### Results
 The results are included as plot in the `results/` folder and are shown here:
-<img src="https://github.com/fritz-max/replicating-1607.00133/blob/main/results/accuracy_plot.png">
+<img src="https://github.com/fritz-max/replicating-1607.00133/blob/main/results/accuracy_plots.png">
 
 From left to right the noise level increases, showing how this affects the accuracy of the model.
 
