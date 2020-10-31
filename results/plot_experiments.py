@@ -9,8 +9,8 @@ exp2 = (np.load("train_accuracies_noise2.npy")/100,
 exp4 = (np.load("train_accuracies_noise4.npy")[:500]/100,
         np.load("test_accuracies_noise4.npy")[:500]/100)
 
-exp8 = (np.load("train_accuracies_noise8.npy")/100,
-        np.load("test_accuracies_noise8.npy")/100)
+exp8 = (np.load("train_accuracies_noise8.npy")[:180]/100,
+        np.load("test_accuracies_noise8.npy")[:180]/100)
 
 experiments = [exp2, exp4, exp8]
 
@@ -29,6 +29,9 @@ for ax, (y_train, y_test) in zip(reversed(axes), experiments):
     ax.legend()
     ax.yaxis.set_tick_params(labelbottom=True)
 
+axes[0].title.set_text('(1) Large noise')
+axes[1].title.set_text('(2) Medium noise')
+axes[2].title.set_text('(3) Small noise')
 plt.xlim(0, 110)
 plt.ylim(0.65, 1)
 plt.show()
