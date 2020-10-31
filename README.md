@@ -19,7 +19,7 @@ The used differentially private optimizer (DPSGD) as well as the moments account
 The results are included as plot in the `results/` folder and are shown here:
 <img src="https://github.com/fritz-max/replicating-1607.00133/blob/main/results/accuracy_plot.png">
 
-From Left to right the noise level increases, showing how this affects the accuracy of the model.
+From left to right the noise level increases, showing how this affects the accuracy of the model.
 
 ## Run the experiment yourself
 You can replicate the results yourself by using the provided code. Clone the repo and install the requirements using
@@ -42,6 +42,3 @@ $ python mnist_1607.00133.py
 [2] IBM. [*IBM Differential Privacy Library*](https://github.com/zhehedream/COEN281).
 
 [3] Chris Waites. [*PyVacy: Privacy Algorithms for PyTorch*](https://github.com/ChrisWaites/pyvacy).
-
-## Licenses 
-?
