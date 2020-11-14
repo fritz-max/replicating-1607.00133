@@ -39,6 +39,6 @@ $ python mnist_1607.00133.py
 
 [1] Martín Abadi, Andy Chu, Ian Goodfellow, H. Brendan McMahan, Ilya Mironov, Kunal Talwar, Li Zhang. *Deep Learning with Differential Privacy*. [arXiv:1607.00133v2](https://arxiv.org/abs/1607.00133v2)
 
-[2] IBM. [*IBM Differential Privacy Library*](https://github.com/zhehedream/COEN281).
+[2] IBM. [*IBM Differential Privacy Library*](https://github.com/IBM/differential-privacy-library).
 
 [3] Chris Waites. [*PyVacy: Privacy Algorithms for PyTorch*](https://github.com/ChrisWaites/pyvacy).
